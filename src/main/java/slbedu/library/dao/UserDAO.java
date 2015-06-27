@@ -18,6 +18,7 @@ public class UserDAO {
     public void addUser(User user) {
         user.setPassword(getHashedPassword(user.getPassword()));
         em.persist(user);
+        em.flush();
     }
 
     public boolean validateUserCredentials(String userName, String password) {

@@ -1,7 +1,9 @@
 package slbedu.library.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +27,12 @@ public class Movie implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="starting_time")
 	private Date startingTime;
+
+	public Movie(String movieName, Date startingTime, Hall hall) {
+		this.movieName = movieName;
+		this.startingTime = startingTime;
+		this.hall = hall;
+	}
 
 	//bi-directional many-to-one association to Hall
 	@ManyToOne

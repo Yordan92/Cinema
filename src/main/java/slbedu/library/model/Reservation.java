@@ -26,6 +26,12 @@ public class Reservation implements Serializable {
 	@ManyToOne
 	private Movie movie;
 
+	public Reservation(User user, Movie movie) {
+		super();
+		this.user = user;
+		this.movie = movie;
+	}
+
 	//bi-directional many-to-one association to ReservationEntity
 	@OneToMany(mappedBy="reservation")
 	private List<ReservationEntity> reservationEntities;

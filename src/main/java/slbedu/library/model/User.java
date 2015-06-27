@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,6 +27,10 @@ public class User implements Serializable {
     
     @Column(name="is_supervisor")
     private boolean isSupervisor;
+
+	//bi-directional many-to-one association to Reservation
+	@OneToMany(mappedBy="user")
+	private List<Reservation> reservations;
 
     public User() {
     }
@@ -59,6 +64,28 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public List<Reservation> getReservations() {
+		return this.reservations;
+	}
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+
+	public Reservation addReservation(Reservation reservation) {
+		getReservations().add(reservation);
+		reservation.setUser(this);
+
+		return reservation;
+	}
+
+	public Reservation removeReservation(Reservation reservation) {
+		getReservations().remove(reservation);
+		reservation.setUser(null);
+
+		return reservation;
+	}
 
     @Override
     public String toString() {
