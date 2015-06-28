@@ -3,26 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <title>Bought tickets</title>
+<link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="styles/library.css" />
+<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 <script>
-	function display_tickets(){
+	function display_tickets() {
 		$.ajax({
-            url: 'rest/',
-			type: "GET",
-			dataType: "json",
-			success: function(data){
-				$('.ticket').append();
+			url : 'rest/employee/movies/maliii',
+			type : "GET",
+			dataType : "json",
+			success : function(data) {
+				
+				debugger;
+				var val = data.seat;
+				var table = $("<table/>");
+				var row = $("<tr/>");
+				table.append(row);
+				val.forEach(function(object) {
+					row.append($('<td><pre>col: ' + object.col + " </pre></td>"));
+					row.append($('<td><pre>row: ' + object.row + " </pre></td>"));
+					row.append($('<td><pre>hall: ' + object.hall.name + " </pre></td>"));
+				});
+
+				$('.ticket').append(table);
+			},
+			error : function(err) {
+				console.log(err);
 			}
-		
+
 		})
 	}
-
-
 </script>
 </head>
 <body onload="display_tickets()">
-<div class="ticket">
-
-</div>
+	<div class="ticket"></div>
 
 </body>
 </html>

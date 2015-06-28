@@ -15,7 +15,7 @@
             dataType : "json",
 		    statusCode: {
 			        200: function() {
-			        	$('.reserved_seats').hide();
+			        	$(".reserved_seats").hide();
 			        	$( ".login_register" ).hide();
                         isUserAuthenticated = true;
 			        },
@@ -34,8 +34,8 @@
 			dataType:'text',
 			success: function(answer) {
 				if(answer === 'true'){
+					$(".reserved_seats").show();
 					$('.allTickets').hide();
-		        	$(".reserved_seats").append("<a href=\"boughtTickets.html\" style=\"display:block\">All bought ticket for projections</a><a href=\"allTickets.html\">All tickets for users</a>");
 		        	$( ".login_register" ).hide();
 				}
 			}
@@ -198,6 +198,8 @@
 	</div>
 	
 	 <div class="reserved_seats">
+	 	<a href="boughtTickets.html" style="display:block">All bought ticket for projections</a>
+	 	<a href="allTickets.html">All tickets for users</a>
  	</div>
  	
 	<div class="logout">
