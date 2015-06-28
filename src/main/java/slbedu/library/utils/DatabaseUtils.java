@@ -100,6 +100,7 @@ public class DatabaseUtils {
     	MOVIES[2].setHall(HALLS[1]);
         for (User user : USERS) {
             userDAO.addUser(user);
+           
         }
         
         for (Hall hall: HALLS) {

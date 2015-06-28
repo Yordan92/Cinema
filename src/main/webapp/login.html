@@ -36,6 +36,7 @@
 			        	$( "#reset_login" ).trigger( "click" );
 			          },
 			        200: function() {
+			        	localStorage.setItem("UserName", userName);
 			        	window.location.replace("index.html");
 			        }
 		        }
