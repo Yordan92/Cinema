@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>All tickets</title>
+<script>
+	function display_tickets(){
+		$.ajax({
+            url: 'rest/',
+			type: "GET",
+			dataType: "json",
+			success: function(data){
+				$(".ticket").append();				
+			}
+		})
+	}
+</script>
+</head>
+<body onload="display_tickets()">
+	<div class="ticket">
+	</div>
+</body>
+</html>
