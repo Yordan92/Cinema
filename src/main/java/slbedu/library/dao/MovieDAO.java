@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import slbedu.library.model.Movie;
 
+
 @Singleton
 public class MovieDAO {
 
@@ -27,4 +28,5 @@ public class MovieDAO {
         query.setParameter("startingTime", startingTime);
         return query.getResultList();
     }
+
 }
