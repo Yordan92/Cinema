@@ -3,6 +3,8 @@ package slbedu.library.model;
 import java.io.Serializable;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.List;
  * 
  */
 @Entity
+@XmlRootElement
 @Table(name="MOVIE")
 @NamedQuery(name="Movie.findAll", query="SELECT m FROM Movie m")
 public class Movie implements Serializable {
@@ -41,7 +44,8 @@ public class Movie implements Serializable {
 	private Hall hall;
 
 	//bi-directional many-to-one association to Reservation
-	@OneToMany(mappedBy="movie")	
+	@OneToMany(mappedBy="movie")
+	//@XmlElement
 	private List<Reservation> reservations = new ArrayList<>();
 
 	public Movie() {
