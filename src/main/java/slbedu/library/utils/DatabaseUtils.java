@@ -1,17 +1,21 @@
 package slbedu.library.utils;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import slbedu.library.dao.HallDAO;
 import slbedu.library.dao.MovieDAO;
 import slbedu.library.dao.ReservationDAO;
 import slbedu.library.dao.UserDAO;
+import slbedu.library.model.Hall;
 import slbedu.library.model.Movie;
 import slbedu.library.model.Reservation;
+import slbedu.library.model.Seat;
 import slbedu.library.model.User;
 
 @Stateless
@@ -34,6 +38,21 @@ public class DatabaseUtils {
     	new Reservation(USERS[2], MOVIES[2])
     };
 
+    private static Seat[] SEATS_1 = {
+    	new Seat(1, 1), new Seat(1, 2), new Seat(1, 3), new Seat(1, 4), new Seat(1, 5),
+    	new Seat(2, 1), new Seat(2, 2), new Seat(2, 3), new Seat(2, 4), new Seat(2, 5),
+    	new Seat(3, 1), new Seat(3, 2), new Seat(3, 3), new Seat(3, 4), new Seat(3, 5)
+    };
+
+    private static Seat[] SEATS_2 = {
+    	new Seat(1, 1), new Seat(1, 2), new Seat(1, 3), new Seat(1, 4),
+    	new Seat(2, 1), new Seat(2, 2), new Seat(2, 3), new Seat(2, 4),
+    	new Seat(3, 1), new Seat(3, 2), new Seat(3, 3), new Seat(3, 4),
+    };
+    
+    private static Hall[] HALLS = {
+    	new Hall("Majna town"), new Hall("qkata rabota")
+    };
 
     @PersistenceContext
     private EntityManager em;
@@ -45,6 +64,9 @@ public class DatabaseUtils {
     private ReservationDAO reservationDAO;
     
     @EJB
+    private HallDAO hallDAO;
+    
+    @EJB
     private MovieDAO movieDAO;
     
     public void addTestDataToDB() {
@@ -53,18 +75,46 @@ public class DatabaseUtils {
     }
 
     private void deleteData() {
+        em.createQuery("DELETE FROM Seat").executeUpdate();
+        em.createQuery("DELETE FROM ReservationEntity").executeUpdate();
+        em.createQuery("DELETE FROM Reservation").executeUpdate();
+        em.createQuery("DELETE FROM Movie").executeUpdate();
+        em.createQuery("DELETE FROM Hall").executeUpdate();
         em.createQuery("DELETE FROM User").executeUpdate();
    }
 
     private void addTestUsers() {
-//        for (User user : USERS) {
-//            userDAO.addUser(user);
-//        }
-//        for (Movie m: MOVIES) {
-//        	movieDAO.addMovie(m);
-//        }
-//        for (Reservation r: RESERVATIONS) {
-//        	reservationDAO.addReservation(r);
-//        }
+        for (User user : USERS) {
+            userDAO.addUser(user);
+        }
+        
+        for (Hall hall: HALLS) {
+        	hallDAO.addHall(hall);
+        }
+        
+        for (Seat seat: SEATS_1) {
+        	HALLS[0].addSeat(seat);
+        }
+        
+        for (Seat seat: SEATS_2) {
+        	HALLS[1].addSeat(seat);
+        }
+        
+        for (Hall hall: HALLS) {
+        	hallDAO.updateHall(hall);
+        }
+        
+        List<Hall> halls = hallDAO.findAll();
+        for(Hall h: halls) {
+        	System.out.println(h);
+        }
+        
+        for (Movie m: MOVIES) {
+        	movieDAO.addMovie(m);
+        }
+        
+        for (Reservation r: RESERVATIONS) {
+        	reservationDAO.addReservation(r);
+        }
     }
 }
