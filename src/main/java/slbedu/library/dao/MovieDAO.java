@@ -21,6 +21,10 @@ public class MovieDAO {
     	em.persist(movie);
     	em.flush();
     }
+    
+    public Movie getById(int id) {
+    	return em.find(Movie.class, id);
+    }
         
     public List<Movie> getAll() {
     	String txtQuery = "SELECT m FROM Movie m";

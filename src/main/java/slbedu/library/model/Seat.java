@@ -3,6 +3,7 @@ package slbedu.library.model;
 import java.io.Serializable;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * 
  */
 @Entity
+@XmlRootElement
 @Table(name="SEAT")
 @NamedQuery(name="Seat.findAll", query="SELECT s FROM Seat s")
 public class Seat implements Serializable {

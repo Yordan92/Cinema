@@ -39,10 +39,10 @@ public class HallDAO {
 		}
 	}
 
-	public List<Seat> findSeatsInHall(int id) {
-		String txtQuery = "SELECT id FROM SEAT u WHERE u.id = :id";
+	public List<Seat> findSeatsInHall(Hall hall) {
+		String txtQuery = "SELECT s FROM Seat s WHERE s.hall = :hall";
 		TypedQuery<Seat> query = em.createQuery(txtQuery, Seat.class);
-		query.setParameter("id", id);
+		query.setParameter("hall", hall);
 		return querySeat(query);
 	}
 
@@ -55,7 +55,7 @@ public class HallDAO {
 	}
 
 	public Hall findHallById(int id) {
-		String txtQuery = "SELECT name FROM HALL u WHERE u.id = :id";
+		String txtQuery = "SELECT u FROM Hall u WHERE u.id = :id";
 		TypedQuery<Hall> query = em.createQuery(txtQuery, Hall.class);
 		query.setParameter("id", id);
 		return queryHall(query);

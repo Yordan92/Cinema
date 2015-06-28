@@ -84,6 +84,9 @@ public class DatabaseUtils {
    }
 
     private void addTestUsers() {
+    	MOVIES[0].setHall(HALLS[0]);
+    	MOVIES[1].setHall(HALLS[1]);
+    	MOVIES[2].setHall(HALLS[1]);
         for (User user : USERS) {
             userDAO.addUser(user);
         }
@@ -104,14 +107,11 @@ public class DatabaseUtils {
         	hallDAO.updateHall(hall);
         }
         
-        List<Hall> halls = hallDAO.findAll();
-        for(Hall h: halls) {
-        	System.out.println(h);
-        }
-        
         for (Movie m: MOVIES) {
         	movieDAO.addMovie(m);
         }
+        
+        System.out.println("MOVIES[0].ID : " + MOVIES[0].getId());
         
         for (Reservation r: RESERVATIONS) {
         	reservationDAO.addReservation(r);
