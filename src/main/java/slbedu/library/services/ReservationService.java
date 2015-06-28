@@ -27,7 +27,7 @@ public class ReservationService {
 	
 	private List<TemporateReservation> reservationsUnpaid = new ArrayList<>();
 	
-	public List<SeatTrans> getSeats(Movie movie) {
+	public synchronized List<SeatTrans> getSeats(Movie movie) {
 		List<Seat> seats = hallDAO.findSeatsInHall(movie.getHall());
 		List<SeatTrans> result = new ArrayList<>();
 		for(Seat s: seats) {
@@ -42,7 +42,7 @@ public class ReservationService {
 		return result;
 	}
 	
-	public void sheduleTemproates(int minutes) {
+	public synchronized void sheduleTemproates(int minutes) {
 		for(TemporateReservation tmp: reservationsUnpaid) {
 			Calendar c = Calendar.getInstance();
 			c.setTime(new Date());
@@ -54,7 +54,7 @@ public class ReservationService {
 		}
 	}
 	
-	public void payReservation(User user, Movie movie) {
+	public synchronized void payReservation(User user, Movie movie) {
 		for(TemporateReservation tmp: this.reservationsUnpaid) {
 			if(tmp.res.getMovie().equals(movie) && tmp.res.getUser().equals(user)) {
 				resrvationDAO.addReservation(tmp.res);
@@ -64,7 +64,7 @@ public class ReservationService {
 		}
 	}
 	
-	private List<Reservation> getListFromTemporateReservations(List<TemporateReservation> tmplist) {
+	private synchronized List<Reservation> getListFromTemporateReservations(List<TemporateReservation> tmplist) {
 		List<Reservation> result = new ArrayList<Reservation>();
 		for(TemporateReservation tmp: tmplist) {
 			result.add(tmp.res);
@@ -72,12 +72,49 @@ public class ReservationService {
 		return result;
 	}
 	
-	public void startReservation(Movie movie, User user) {
+	public synchronized void startReservation(Movie movie, User user) {
 		Reservation res = new Reservation(user, movie);
 		reservationsUnpaid.add(new TemporateReservation(res, new Date()));
 	}
+	
+	public synchronized boolean addPlaceToReservation(User user, Movie movie, Seat seat) {
+		//check if not taken
+		if(checkIfSeatIsTaken(movie, seat)) {
+			return false;
+		}
+		for(TemporateReservation tmp: this.reservationsUnpaid) {
+			if(tmp.res.getUser().equals(user) && tmp.res.getMovie().equals(movie)) {
+				ReservationEntity r = new ReservationEntity(tmp.res, seat);
+				r.setReservation(tmp.res);
+				tmp.res.addReservationEntity(r);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private synchronized boolean checkIfSeatIsTaken(Movie movie, Seat seat) {
+		List<Reservation> reservationsFromDb = resrvationDAO.getAllReservationsForMovie(movie);
+		for(Reservation res: reservationsFromDb) {
+			for(ReservationEntity e: res.getReservationEntities()) {
+				if(e.getSeat().equals(seat)) {
+					return true;
+				}
+			}
+		}
+		
+		for(TemporateReservation tmp: reservationsUnpaid) {
+			for(ReservationEntity e: tmp.res.getReservationEntities()) {
+				if(e.getSeat().equals(seat)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 
-	private void mapSeats(Movie movie, List<SeatTrans> result,
+	private synchronized void mapSeats(Movie movie, List<SeatTrans> result,
 			List<Reservation> reservations) {
 		for(Reservation reservation: reservations) {
 			if(reservation.getMovie().equals(movie)) {
@@ -88,7 +125,7 @@ public class ReservationService {
 		}
 	}
 	
-	private void matchTaken(List<SeatTrans> seats, int seatId) {
+	private synchronized void matchTaken(List<SeatTrans> seats, int seatId) {
 		for(SeatTrans s: seats) {
 			if(s.id == seatId) {
 				s.isTaken = true;
