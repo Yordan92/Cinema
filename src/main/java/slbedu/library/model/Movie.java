@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Movie implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@Column(name="movie_name")
@@ -39,8 +41,8 @@ public class Movie implements Serializable {
 	private Hall hall;
 
 	//bi-directional many-to-one association to Reservation
-	@OneToMany(mappedBy="movie")
-	private List<Reservation> reservations;
+	@OneToMany(mappedBy="movie")	
+	private List<Reservation> reservations = new ArrayList<>();
 
 	public Movie() {
 	}
@@ -97,6 +99,41 @@ public class Movie implements Serializable {
 		reservation.setMovie(null);
 
 		return reservation;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result
+				+ ((movieName == null) ? 0 : movieName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Movie other = (Movie) obj;
+		if (id != other.id)
+			return false;
+		if (movieName == null) {
+			if (other.movieName != null)
+				return false;
+		} else if (!movieName.equals(other.movieName))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Movie [id=" + id + ", movieName=" + movieName
+				+ ", startingTime=" + startingTime + ", hall=" + hall + "]";
 	}
 
 }

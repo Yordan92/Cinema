@@ -1,7 +1,10 @@
 package slbedu.library.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,19 +19,24 @@ public class Hall implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	private String name;
 
 	//bi-directional many-to-one association to Movie
 	@OneToMany(mappedBy="hall")
-	private List<Movie> movies;
+	private List<Movie> movies = new ArrayList<>();
 
 	//bi-directional many-to-one association to Seat
-	@OneToMany(mappedBy="hall")
-	private List<Seat> seats;
+	@OneToMany(mappedBy="hall", cascade=CascadeType.PERSIST)
+	private List<Seat> seats = new ArrayList<>();
 
 	public Hall() {
+	}
+
+	public Hall(String name) {
+		this.name = name;
 	}
 
 	public int getId() {
@@ -89,6 +97,33 @@ public class Hall implements Serializable {
 		seat.setHall(null);
 
 		return seat;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Hall other = (Hall) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Hall [id=" + id + ", name=" + name + "]";
 	}
 
 }
