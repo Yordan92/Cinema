@@ -1,6 +1,7 @@
 package slbedu.library.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import slbedu.library.model.Movie;
 import slbedu.library.model.Reservation;
 import slbedu.library.model.ReservationEntity;
 import slbedu.library.model.Seat;
+import slbedu.library.model.User;
 
 @Singleton
 public class ReservationService {
@@ -23,7 +25,7 @@ public class ReservationService {
 	@EJB
 	private ReservationDAO resrvationDAO;
 	
-	private List<Reservation> reservations = new ArrayList<>();
+	private List<TemporateReservation> reservationsUnpaid = new ArrayList<>();
 	
 	public List<SeatTrans> getSeats(Movie movie) {
 		List<Seat> seats = hallDAO.findSeatsInHall(movie.getHall());
@@ -34,6 +36,49 @@ public class ReservationService {
 			result.add(trans);
 		}
 		List<Reservation> reservations = resrvationDAO.getAllReservationsForMovie(movie);
+		mapSeats(movie, result, reservations);
+		mapSeats(movie, result, getListFromTemporateReservations(reservationsUnpaid));
+		
+		return result;
+	}
+	
+	public void sheduleTemproates(int minutes) {
+		for(TemporateReservation tmp: reservationsUnpaid) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			c.add(Calendar.MINUTE, -minutes);
+			if(tmp.date.before(c.getTime())) {
+				//shitvame go
+				reservationsUnpaid.remove(tmp);
+			}
+		}
+	}
+	
+	public void payReservation(User user, Movie movie) {
+		for(TemporateReservation tmp: this.reservationsUnpaid) {
+			if(tmp.res.getMovie().equals(movie) && tmp.res.getUser().equals(user)) {
+				resrvationDAO.addReservation(tmp.res);
+				this.reservationsUnpaid.remove(tmp);
+				break;
+			}
+		}
+	}
+	
+	private List<Reservation> getListFromTemporateReservations(List<TemporateReservation> tmplist) {
+		List<Reservation> result = new ArrayList<Reservation>();
+		for(TemporateReservation tmp: tmplist) {
+			result.add(tmp.res);
+		}
+		return result;
+	}
+	
+	public void startReservation(Movie movie, User user) {
+		Reservation res = new Reservation(user, movie);
+		reservationsUnpaid.add(new TemporateReservation(res, new Date()));
+	}
+
+	private void mapSeats(Movie movie, List<SeatTrans> result,
+			List<Reservation> reservations) {
 		for(Reservation reservation: reservations) {
 			if(reservation.getMovie().equals(movie)) {
 				for(ReservationEntity r: reservation.getReservationEntities()) {
@@ -41,8 +86,6 @@ public class ReservationService {
 				}
 			}
 		}
-		
-		return result;
 	}
 	
 	private void matchTaken(List<SeatTrans> seats, int seatId) {
@@ -54,7 +97,42 @@ public class ReservationService {
 	}
 }
 
-class Tmp {
+class TemporateReservation {
 	Reservation res;
 	Date date;
+	
+	TemporateReservation(Reservation r, Date d) {
+		this.res = r;
+		this.date = d;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((res == null) ? 0 : res.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TemporateReservation other = (TemporateReservation) obj;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
+			return false;
+		if (res == null) {
+			if (other.res != null)
+				return false;
+		} else if (!res.equals(other.res))
+			return false;
+		return true;
+	}
 }
