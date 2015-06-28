@@ -19,6 +19,7 @@ import slbedu.library.model.User;
 @Singleton
 public class ReservationService {
 	
+	
 	@EJB
 	private HallDAO hallDAO;
 	
@@ -174,4 +175,5 @@ class TemporateReservation {
 			return false;
 		return true;
 	}
+	
 }

@@ -38,5 +38,13 @@ public class MovieDAO {
         query.setParameter("startingTime", startingTime);
         return query.getResultList();
     }
+    
+    public Movie findMoviebyName(String moviename)
+    {
+    	String txtQuery = "Select m FROM Movie m WHERE m.movieName=:moviename";
+    	TypedQuery<Movie>query = em.createQuery(txtQuery,Movie.class);
+    	query.setParameter("moviename", moviename);
+    	return query.getSingleResult();
+    }
 
 }

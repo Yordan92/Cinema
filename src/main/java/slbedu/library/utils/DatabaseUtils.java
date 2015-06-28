@@ -57,9 +57,11 @@ public class DatabaseUtils {
     };
     
     private static ReservationEntity[] RES_ENTITIES = {
-    	new ReservationEntity(RESERVATIONS[0], SEATS_1[0]),
+    	new ReservationEntity(RESERVATIONS[0], SEATS_1[2]),
+    	new ReservationEntity(RESERVATIONS[1], SEATS_2[1]),
+    	new ReservationEntity(RESERVATIONS[2], SEATS_2[3]),
     	new ReservationEntity(RESERVATIONS[0], SEATS_1[1]),
-    	new ReservationEntity(RESERVATIONS[0], SEATS_1[2])
+    	new ReservationEntity(RESERVATIONS[0], SEATS_1[4]),
     };
 
     @PersistenceContext
