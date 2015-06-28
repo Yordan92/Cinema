@@ -4,7 +4,6 @@
 	<meta charset="UTF-8">
 	<title>Log in</title>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="styles/library.css" />
 	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
@@ -37,7 +36,7 @@
 			        	$( "#reset_login" ).trigger( "click" );
 			          },
 			        200: function() {
-			        	window.location.replace("index2.html");
+			        	window.location.replace("index.html");
 			        }
 		        }
 		    });
@@ -46,19 +45,16 @@
 </script>
 </head>
 
-<div id="header">
-		<h1 class="login">Log in</h1>
-</div>
-
-<body id="body" class="home">
+<body>
+	<h1 >Log in</h1>
 
 	<form id="login_form" role="form" method="post">
 		<div class="form-group">
-			<label for="userName" style="color:white">Username:</label> <input type="text"
+			<label for="userName" >Username:</label> <input type="text"
 				class="form-control" name="username" id="userName" value="">
 		</div>
 		<div class="form-group">
-			<label for="pwd" style="color:white">Password:</label> <input type="password"
+			<label for="pwd" >Password:</label> <input type="password"
 				class="form-control" name="password" id="pwd" value="">
 		</div>
 	<div class="buttons">

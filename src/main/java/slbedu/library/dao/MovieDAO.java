@@ -21,6 +21,12 @@ public class MovieDAO {
     	em.persist(movie);
     	em.flush();
     }
+        
+    public List<Movie> getAll() {
+    	String txtQuery = "SELECT m FROM Movie m";
+        TypedQuery<Movie> query = em.createQuery(txtQuery, Movie.class);
+        return query.getResultList();
+    }
     
     public List<Movie> getMoviesAfter(Date startingTime) {
     	String txtQuery = "SELECT m FROM Movie m WHERE m.startingTime>=:startingTime";

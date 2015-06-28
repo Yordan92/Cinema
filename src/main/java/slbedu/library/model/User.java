@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +31,7 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Reservation
 	@OneToMany(mappedBy="user")
-	private List<Reservation> reservations;
+	private List<Reservation> reservations = new ArrayList<>();;
 
     public User() {
     }
@@ -130,4 +131,5 @@ public class User implements Serializable {
 	public void setSupervisor(boolean isSupervisor) {
 		this.isSupervisor = isSupervisor;
 	}
+	
 }

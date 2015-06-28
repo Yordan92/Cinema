@@ -1,6 +1,5 @@
 package slbedu.library.dao;
 
-
 import java.util.List;
 
 import javax.ejb.Singleton;
@@ -11,41 +10,62 @@ import javax.persistence.TypedQuery;
 import slbedu.library.model.Hall;
 import slbedu.library.model.Seat;
 
-
 @Singleton
 public class HallDAO {
 
-    @PersistenceContext
-    private EntityManager em;
-    
-    
-    public List<Seat> findSeatsInHall(int id){
-	 	String txtQuery = "SELECT id FROM SEAT u WHERE u.id = :id";
-        TypedQuery<Seat> query = em.createQuery(txtQuery, Seat.class);
-        query.setParameter("id", id);
-        return querySeat(query);
-}
+	@PersistenceContext
+	private EntityManager em;
 
- private List<Seat> querySeat(TypedQuery<Seat> query) {
-        try {
-            return query.getResultList();
-        } catch (Exception e) {
-            return null;
-        }
-}
+	public void addHall(Hall hall) {
+		em.persist(hall);
+		em.flush();
+	}
+	
+	public List<Hall> findAll() {
+		String txtQuery = "SELECT h FROM Hall h";
+		TypedQuery<Hall> query = em.createQuery(txtQuery, Hall.class);
+		return query.getResultList();
+	}
 
-public Hall findHallById(int id) {
-        String txtQuery = "SELECT name FROM HALL u WHERE u.id = :id";
-        TypedQuery<Hall> query = em.createQuery(txtQuery, Hall.class);
-        query.setParameter("id", id);
-        return queryHall(query);
-    }
- 
-    private Hall queryHall(TypedQuery<Hall> query) {
-        try {
-            return query.getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+	public void updateHall(Hall hall) {
+		Hall hallFromDb;
+		if((hallFromDb = em.find(Hall.class, hall.getId())) == null) {
+			System.out.println("hall with id does not exist: " + hall.getId());
+		} else {
+			hallFromDb.setMovies(hall.getMovies());
+			hallFromDb.setSeats(hall.getSeats());
+			em.merge(hallFromDb);
+			em.flush();
+		}
+	}
+
+	public List<Seat> findSeatsInHall(int id) {
+		String txtQuery = "SELECT id FROM SEAT u WHERE u.id = :id";
+		TypedQuery<Seat> query = em.createQuery(txtQuery, Seat.class);
+		query.setParameter("id", id);
+		return querySeat(query);
+	}
+
+	private List<Seat> querySeat(TypedQuery<Seat> query) {
+		try {
+			return query.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public Hall findHallById(int id) {
+		String txtQuery = "SELECT name FROM HALL u WHERE u.id = :id";
+		TypedQuery<Hall> query = em.createQuery(txtQuery, Hall.class);
+		query.setParameter("id", id);
+		return queryHall(query);
+	}
+
+	private Hall queryHall(TypedQuery<Hall> query) {
+		try {
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }
