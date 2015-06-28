@@ -65,7 +65,7 @@
     }
 
     function renderTable(data) {
-        $("#movie_table tr").remove();
+        $("#hall").html(' ');
         var movie = data.movie;
         for (var i = 0; i < movie.length; i++) {
             renderRow(movie[i]);
@@ -110,6 +110,7 @@
     
   
     function drawHall(row,movieId) {
+        $("#hall").html(' ');
     	row.forEach(function(colls) {
     		var row = $("<tr/>")
     		colls.forEach(function(element) {
@@ -125,9 +126,9 @@
     						success: function(){
     							element.taken = !element.taken;
         						if(element.taken)
-        							$(this).css('background-color','yellow');
+        							freeSeat.css('background-color','yellow');
         						else
-        							$(this).css('background-color','green');
+        							freeSeat.css('background-color','green');
     						}
     					});		
     				});
