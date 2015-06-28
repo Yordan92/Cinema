@@ -11,10 +11,12 @@ import javax.persistence.PersistenceContext;
 import slbedu.library.dao.HallDAO;
 import slbedu.library.dao.MovieDAO;
 import slbedu.library.dao.ReservationDAO;
+import slbedu.library.dao.ReservationEntityDAO;
 import slbedu.library.dao.UserDAO;
 import slbedu.library.model.Hall;
 import slbedu.library.model.Movie;
 import slbedu.library.model.Reservation;
+import slbedu.library.model.ReservationEntity;
 import slbedu.library.model.Seat;
 import slbedu.library.model.User;
 
@@ -53,6 +55,12 @@ public class DatabaseUtils {
     private static Hall[] HALLS = {
     	new Hall("Majna town"), new Hall("qkata rabota")
     };
+    
+    private static ReservationEntity[] RES_ENTITIES = {
+    	new ReservationEntity(RESERVATIONS[0], SEATS_1[0]),
+    	new ReservationEntity(RESERVATIONS[0], SEATS_1[1]),
+    	new ReservationEntity(RESERVATIONS[0], SEATS_1[2])
+    };
 
     @PersistenceContext
     private EntityManager em;
@@ -69,14 +77,17 @@ public class DatabaseUtils {
     @EJB
     private MovieDAO movieDAO;
     
+    @EJB
+    private ReservationEntityDAO reservationEntityDAO;
+    
     public void addTestDataToDB() {
         deleteData();
         addTestUsers();
     }
 
     private void deleteData() {
-        em.createQuery("DELETE FROM Seat").executeUpdate();
         em.createQuery("DELETE FROM ReservationEntity").executeUpdate();
+        em.createQuery("DELETE FROM Seat").executeUpdate();
         em.createQuery("DELETE FROM Reservation").executeUpdate();
         em.createQuery("DELETE FROM Movie").executeUpdate();
         em.createQuery("DELETE FROM Hall").executeUpdate();
@@ -115,6 +126,10 @@ public class DatabaseUtils {
         
         for (Reservation r: RESERVATIONS) {
         	reservationDAO.addReservation(r);
+        }
+        
+        for (ReservationEntity r: RES_ENTITIES) {
+        	reservationEntityDAO.addEntity(r);
         }
     }
 }

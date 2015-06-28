@@ -42,6 +42,9 @@ public class MovieManager {
     @EJB
     private HallDAO hallDAO;
     
+    @EJB
+    private ReservationService reservationService;
+    
     @Inject
     private UserContext context;
     
@@ -81,18 +84,20 @@ public class MovieManager {
     @Produces("application/json")
     public Collection<SeatTrans> getSeats(@PathParam("id") String id) {
     	int movieId = Integer.parseInt(id);
-    	Hall hall = movieDAO.getById(movieId).getHall();
-    	List<Seat> result = hallDAO.findSeatsInHall(hall);
-    	List<SeatTrans> transObjects = new ArrayList<>();
-    	Random random = new Random();
-    	for(Seat s: result) {
-    		SeatTrans trans = new SeatTrans(s);
-    		
-    		trans.isTaken = random.nextBoolean();
-    		trans.movieId = movieId;
-    		transObjects.add(trans);
-    	}
-    	return transObjects;
+//    	Hall hall = movieDAO.getById(movieId).getHall();
+//    	List<Seat> result = hallDAO.findSeatsInHall(hall);
+//    	List<SeatTrans> transObjects = new ArrayList<>();
+//    	Random random = new Random();
+//    	for(Seat s: result) {
+//    		SeatTrans trans = new SeatTrans(s);
+//    		
+//    		trans.isTaken = random.nextBoolean();
+//    		trans.movieId = movieId;
+//    		transObjects.add(trans);
+//    	}
+    	Movie movie = movieDAO.getById(movieId);
+    	List<SeatTrans> result = reservationService.getSeats(movie);
+    	return result;
     }
 
 //    @POST

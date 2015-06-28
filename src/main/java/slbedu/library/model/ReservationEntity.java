@@ -30,6 +30,11 @@ public class ReservationEntity implements Serializable {
 	public ReservationEntity() {
 	}
 
+	public ReservationEntity(Reservation reservation, Seat seat) {
+		this.reservation = reservation;
+		this.seat = seat;
+	}
+
 	public int getId() {
 		return this.id;
 	}
