@@ -1,6 +1,7 @@
 package slbedu.library.dao;
 
 import java.security.MessageDigest;
+import java.util.List;
 
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
@@ -28,7 +29,13 @@ public class UserDAO {
         query.setParameter("password", getHashedPassword(password));
         return queryUser(query) != null;
     }
-
+    
+    public List<User> findAllUsers() {
+    	 String txtQuery = "SELECT u FROM User u";
+    	 TypedQuery<User> query = em.createQuery(txtQuery, User.class);
+    	 return query.getResultList();
+    }
+    
     public User findUserByName(String userName) {
         String txtQuery = "SELECT u FROM User u WHERE u.userName = :userName";
         TypedQuery<User> query = em.createQuery(txtQuery, User.class);

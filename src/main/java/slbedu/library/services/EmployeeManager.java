@@ -16,6 +16,7 @@ import slbedu.library.dao.ReservationEntityDAO;
 import slbedu.library.dao.SeatDAO;
 import slbedu.library.dao.UserDAO;
 import slbedu.library.model.Movie;
+import slbedu.library.model.Reservation;
 import slbedu.library.model.ReservationEntity;
 import slbedu.library.model.Seat;
 
@@ -50,5 +51,4 @@ public class EmployeeManager {
     	return seatDAO.getAllSeatsfrom(movieReservationsEntities);  	  	
     }
     
-
 }
