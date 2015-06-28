@@ -3,6 +3,7 @@ package slbedu.library.services;
 
 import slbedu.library.dao.HallDAO;
 import slbedu.library.dao.MovieDAO;
+import slbedu.library.dao.SeatDAO;
 import slbedu.library.dao.UserDAO;
 import slbedu.library.model.Hall;
 import slbedu.library.model.Movie;
@@ -43,33 +44,13 @@ public class MovieManager {
     private HallDAO hallDAO;
     
     @EJB
+    private SeatDAO seatDAO;
+    
+    @EJB
     private ReservationService reservationService;
     
     @Inject
     private UserContext context;
-    
-//    @Path("authenticated")
-//    @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response isAuthenticated() {
-//      if (context.getCurrentUser() == null) {
-//          return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
-//      }
-//      return RESPONSE_OK;
-//    }
-//    
-//    @Path("issupervisor")
-//    @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response isSupervisor() {
-//      if (context.getCurrentUser() == null) {
-//          return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
-//      }
-//      if (context.getCurrentUser().isSupervisor()) {
-//    	  return RESPONSE_OK;
-//      };
-//      return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
-//    }
     
     @GET
     @Produces("application/json")
@@ -84,65 +65,25 @@ public class MovieManager {
     @Produces("application/json")
     public Collection<SeatTrans> getSeats(@PathParam("id") String id) {
     	int movieId = Integer.parseInt(id);
-//    	Hall hall = movieDAO.getById(movieId).getHall();
-//    	List<Seat> result = hallDAO.findSeatsInHall(hall);
-//    	List<SeatTrans> transObjects = new ArrayList<>();
-//    	Random random = new Random();
-//    	for(Seat s: result) {
-//    		SeatTrans trans = new SeatTrans(s);
-//    		
-//    		trans.isTaken = random.nextBoolean();
-//    		trans.movieId = movieId;
-//    		transObjects.add(trans);
-//    	}
     	Movie movie = movieDAO.getById(movieId);
     	List<SeatTrans> result = reservationService.getSeats(movie);
     	return result;
+    };
+    
+    @Path("reserve/{movieId}/{seatId}")
+    @GET
+    @Produces("application/json")
+    public Response ebaLiGoKvoE(@PathParam("movieId") String movieId, @PathParam("seatId") String seatId) {
+    	User user = context.getCurrentUser();
+    	Movie movie = movieDAO.getById(Integer.parseInt(movieId));
+    	Seat seat = seatDAO.getById(Integer.parseInt(seatId));
+    	boolean isSuccess = reservationService.addPlaceToReservation(user, movie, seat);
+    	if(isSuccess) {
+    		return RESPONSE_OK;
+    	} else {
+    		return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build(); 
+    	}
     }
-
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public void registerUser(User newUser) {
-//        userDAO.addUser(newUser);
-//        context.setCurrentUser(newUser);
-//    }
-//    
-//    @Path("login")
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response loginUser(User user) {
-//        boolean isUserValid = userDAO.validateUserCredentials(user.getUserName(), user.getPassword());
-//        if (!isUserValid) {
-//            return Response.status(HttpURLConnection.HTTP_UNAUTHORIZED).build();
-//        }
-//        context.setCurrentUser(user);
-//        return RESPONSE_OK;
-//    }
-//    
-//    @Path("authenticated")
-//    @GET
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response isAuthenticated() {
-//        if (context.getCurrentUser() == null) {
-//            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
-//        }
-//        return RESPONSE_OK;
-//    }
-//
-//    @Path("current")
-//    @GET
-//    @Consumes(MediaType.TEXT_PLAIN)
-//    public String getUser() {
-//        if (context.getCurrentUser() == null) {
-//            return null;
-//        }
-//        return context.getCurrentUser().getUserName();
-//    }
-//
-//	@Path("logout")
-//	@GET
-//	@Consumes(MediaType.TEXT_PLAIN)
-//	public void logoutUser() {
-//		context.setCurrentUser(null);
-//	}
+    
+    
 }

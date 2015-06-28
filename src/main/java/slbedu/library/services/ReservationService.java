@@ -90,7 +90,9 @@ public class ReservationService {
 				return true;
 			}
 		}
-		return false;
+		//if there is no reservation, it will be created
+		startReservation(movie, user);
+		return addPlaceToReservation(user, movie, seat);
 	}
 	
 	private synchronized boolean checkIfSeatIsTaken(Movie movie, Seat seat) {
