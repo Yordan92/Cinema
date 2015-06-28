@@ -59,11 +59,21 @@ public class UserManager {
     @Path("current")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
-    public String getUser() {
+    public String getUserName() {
         if (context.getCurrentUser() == null) {
             return null;
         }
         return context.getCurrentUser().getUserName();
+    }
+
+    @Path("currentuser")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    public User getUser() {
+        if (context.getCurrentUser() == null) {
+            return null;
+        }
+        return context.getCurrentUser();
     }
     
     @Path("supervisor")
