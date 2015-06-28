@@ -53,7 +53,7 @@ public class UserManager {
         if (context.getCurrentUser() == null) {
             return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
         }
-        return RESPONSE_OK;
+        	return RESPONSE_OK;
     }
 
     @Path("current")
@@ -64,6 +64,16 @@ public class UserManager {
             return null;
         }
         return context.getCurrentUser().getUserName();
+    }
+    
+    @Path("supervisor")
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    public String getIsSupervisor() {
+        if (context.getCurrentUser() == null) {
+            return "false";
+        }
+        return context.getCurrentUser().isSupervisor() + "";
     }
 
 	@Path("logout")
