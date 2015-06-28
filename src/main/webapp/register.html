@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+	
 <meta charset="UTF-8">
 <title>Register</title>
+<link rel="stylesheet" href="css/style.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
 <link rel="stylesheet" type="text/css" href="styles/library.css" />
 <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+
 <script type="text/javascript">
 	function register() {
 	    var formUrl = $("#register_form").attr("action");
@@ -58,33 +61,36 @@
     }
 </script>
 </head>
-<body>
 
-	<h1 align="center">
-		<b>REGISTRATION FORM</b>
-	</h1>
+<div id="header">
+		<h1 class="login">REGISTRATION FORM</h1>
+</div>
+
+<body id="body" class="home">
 
 	<form id="register_form" role="form" method="post">
 		<div class="form-group">
-			<label for="userName">Username:</label> <input type="text"
+			<label for="userName" style="color:white">Username:</label> <input type="text"
 				class="form-control" name="username" id="userName" value="">
 		</div>
 		<div class="form-group">
-			<label for="pwd">Password:</label> <input type="password"
+			<label for="pwd" style="color:white">Password:</label> <input type="password"
 				class="form-control" name="password" id="pwd" value="">
 		</div>
 		
 		<div class="form-group">
-			<label for="conf_pwd">Confirm password:</label> <input type="password"
+			<label for="conf_pwd" style="color:white">Confirm password:</label> <input type="password"
 				class="form-control" name="confirm_password" id="conf_pwd" value="">
 		</div>
 		
 		<div class="form-group">
-			<label for="email">Email:</label> <input type="email"
+			<label for="email" style="color:white">Email:</label> <input type="email"
 				class="form-control" name="email" id="email" value="">
 		</div>
-		<button type="reset" class="btn btn-default">Reset</button>
-		<button type="button" onclick="register()" class="btn btn-default">Submit</button>
+		<div class="loginButtons">
+			<button type="reset" class="btn btn-default">Reset</button>
+			<button type="button" onclick="register()" class="btn btn-default">Submit</button>
+		</div>
 	</form>
 	
 </body>

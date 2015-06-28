@@ -118,7 +118,7 @@ p a:hover {
 	margin-top:21px!important;
 }
 #body.home {
-	border:1px solid #4f4f4f;
+	border:0px solid #4f4f4f;
 	margin:0 auto;
 	width:958px;
 }
@@ -1271,7 +1271,6 @@ p a:hover {
 }
 /*------------------------- Footer ---------------------------*/
 #footer {
-	background:url(../images/bg-footer.png) repeat-x left bottom;
 	clear:both;
 	height:217px;
 	margin:47px 0 0;
@@ -1441,4 +1440,12 @@ p a:hover {
 }
 #footer div div.connect a#googleplus:hover {
 	background:url(../images/icons.png) no-repeat 0 -72px;
+}
+.login{
+	text-align: center;
+	margin-top:7%;
+}
+.loginButtons {
+	width: 100%;
+  	text-align: center;
 }
